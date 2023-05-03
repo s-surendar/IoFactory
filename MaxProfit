@@ -1,0 +1,71 @@
+using System ;
+
+class MaxProfitKnapSack {
+	// Prints the items which are put
+	// in a knapsack of capacity W
+	static void printknapSack(int timeUnit, int []weightArray,
+							int []profitArray, int profitLength)
+	{
+	    
+		int i, w;
+		int [,]K = new int[profitLength + 1,timeUnit + 1];
+        int pub=0,theatre=0,commercialPark=0;
+		// Build table K[][] in bottom up manner
+		for (i = 0; i <= profitLength; i++) {
+			for (w = 0; w <= timeUnit; w++) {
+				if (i == 0 || w == 0)
+					K[i,w] = 0;
+				else if (weightArray[i - 1] <= w)
+					K[i,w] = Math.Max(profitArray[i - 1] +
+							K[i - 1,w - weightArray[i - 1]], K[i - 1,w]);
+				else
+					K[i,w] = K[i - 1,w];
+			}
+		}
+
+		// stores the result of Knapsack
+		int earnings = K[profitLength,timeUnit];
+		Console.WriteLine("Earnings: $"+earnings);
+
+		w = timeUnit;
+		for (i = profitLength; i > 0 && earnings > 0; i--) {
+
+			// either the result comes from the top
+			// (K[i-1][w]) or from (val[i-1] + K[i-1]
+			// [w-wt[i-1]]) as in Knapsack table. If
+			// it comes from the latter one/ it means
+			// the item is included.
+			
+			if (earnings == K[i - 1,w])
+				continue;
+			else {
+			   
+				// This item is included.
+				if(weightArray[i - 1]==4)
+				    pub++;
+                if(weightArray[i - 1]==5)
+                    theatre++;
+                if(weightArray[i - 1]==10)
+                    commercialPark++;
+				// Since this weight is included its
+				// value is deducted
+				
+				earnings = earnings - profitArray[i - 1];
+				w = w - weightArray[i - 1];
+			}
+		}
+		Console.WriteLine("T:"+theatre+"P:"+pub+"C:"+commercialPark);
+	}
+
+	public static void Main()
+	{
+		int []profitArray = { 1000, 1500, 3000 };
+		int []weightArray = { 4, 5, 10 };
+	
+		int profitLength = profitArray.Length;
+		Console.WriteLine("Enter your timeUnit:");
+        int timeUnit = Convert.ToInt32(Console.ReadLine());
+		printknapSack(timeUnit, weightArray, profitArray, profitLength);
+	}
+}
+

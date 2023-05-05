@@ -1,0 +1,76 @@
+using System;
+using System.Collections.Generic;
+public class item
+{
+    public int weight;
+    public int value;
+    public item(int weight, int value)
+    {
+        this.weight = weight;
+        this.value = value;
+    }
+}
+class MaxProfit
+{
+    static void PrintCombination(int timeUnit, int maxWeight)
+    {
+        int pub = 0,
+            theatre = 0,
+            commercialPark = 0;
+        switch (maxWeight)
+        {
+            case 4:
+                pub = timeUnit / maxWeight;
+                break;
+            case 5:
+                theatre = timeUnit / maxWeight;
+                break;
+            case 10:
+                commercialPark = timeUnit / maxWeight;
+                break;
+        }
+        Console.WriteLine("T:" + theatre + "P:" + pub + "C:" + commercialPark);
+    }
+	
+    public static void Main()
+    {
+        List < item > items = new List < item > ()
+        {
+            new item(4, 1000),
+                new item(5, 1500),
+                new item(10, 3000),
+        };
+        Console.WriteLine("Enter your timeUnit:");
+        int timeUnit = Convert.ToInt32(Console.ReadLine());
+        int[] capacityList = new int[timeUnit + 1];
+        int maxProfit = 0;
+        int maxWeight = 0;
+        for (int itemsIterator = 0; itemsIterator < items.Count; itemsIterator++)
+        {
+            for (int capacityIterator = 0; capacityIterator <= timeUnit; capacityIterator++)
+            {
+                if (capacityIterator > items[itemsIterator].weight)
+                {
+                    int quotient = capacityIterator % items[itemsIterator].weight;
+                    int remainder = capacityIterator / items[itemsIterator].weight;
+                    if (quotient == 0)
+                    {
+                        capacityList[capacityIterator] = capacityList[capacityIterator - 1] + (items[itemsIterator].value * (remainder - 1));
+                    }
+                    else capacityList[capacityIterator] = capacityList[capacityIterator - 1] + (items[itemsIterator].value * remainder);
+                }
+                else
+                {
+                    capacityList[capacityIterator] = 0;
+                }
+            }
+            if (capacityList[timeUnit] > maxProfit)
+            {
+                maxProfit = capacityList[timeUnit];
+                maxWeight = items[itemsIterator].weight;
+            }
+        }
+        Console.WriteLine("Earnings: $" + maxProfit);
+        PrintCombination(timeUnit,maxWeight);
+    }
+}

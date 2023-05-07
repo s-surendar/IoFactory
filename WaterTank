@@ -1,0 +1,53 @@
+using System;
+using System.Collections.Generic;
+
+class WaterTank
+{
+    
+    public static void Main()
+    {
+      
+      int[] it ={0,0,0,0,4,0,0,0,4,0,0};
+      //int[] it ={0,4,0,0,0,6,0,6,4,0};
+      int[] itResult = new int[it.Length];
+ 
+        
+        List <int> items = new List <int>();
+        for(int i=0;i<it.Length;i++){
+        Stack<int> temp = new Stack<int>();    
+          //Console.WriteLine(itResult[i]);
+          if(it[i]!=0){
+            //Console.WriteLine(it[i]);  
+            for(int j= i+1;j<it.Length&& j!=it.Length-1;j++){
+              if(it[j]==0)
+              {
+                temp.Push(j);
+                //Console.WriteLine("it[j]"+it[j]+"j"+j+""+it.Length);  
+                //items.Insert(j,it[i]);
+                
+                //Console.WriteLine(itResult[j]);
+              }
+              else
+              {
+                int count = temp.Count;
+                for(int k=0;k<count;k++){
+                  int z= temp.Pop();
+                  itResult[z]=it[i];
+                }
+                break;
+              }
+                
+            }
+          }
+
+        }
+        int sum = 0;
+        for(int i=0;i<itResult.Length;i++){
+        sum+=itResult[i];
+        Console.Write(itResult[i]);
+        }
+        
+        Console.WriteLine(" Output:"+sum+ " Units" );
+        
+    }
+}
